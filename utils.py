@@ -365,7 +365,7 @@ def fetch_recipe(recipe_filename, emb_model, tokenizer, device, embedding_name):
 
     parsed_recipe = fetch_parsed_recipe(recipe_filename) # Parsed Recipe File
     
-    if(embedding_name == 'bert'):
+    if embedding_name in ['bert', 'roberta', 'reciperoberta', 'reciperobertatokenwise']:
 
         embedding_vector, vector_lookup_list = generate_bert_embeddings(
             emb_model, tokenizer, parsed_recipe, device

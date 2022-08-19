@@ -41,7 +41,7 @@ from model import AlignmentModel
 from cosine_similarity_model import SimpleModel
 from sequence_model import SequenceModel
 from naive_model import NaiveModel
-from transformers import BertTokenizer, BertModel
+from transformers import AutoTokenizer, AutoModel
 from flair.data import Sentence
 from flair.embeddings import ELMoEmbeddings
 from training_testing import Folds
@@ -55,6 +55,13 @@ def main():
   
     device = torch.device(CUDA_DEVICE if torch.cuda.is_available() else "cpu")
     flair.device = device
+
+    model_name_dict = {
+        'bert': 'bert-base-uncased',
+        'roberta': 'roberta-base',
+        'reciperoberta': 'AnonymousSub/recipes-roberta-base',
+        'reciperobertatokenwise': 'AnonymousSub/recipes-roberta-base-tokenwise-token-and-step-losses_with_ingr_full_lr_decay'
+    }
     
     parser = argparse.ArgumentParser(description = """Automatic Alignment model""")
     parser.add_argument('model_name', type=str, help="""Model Name; one of {'Simple', 'Naive', 'Alignment-no-feature', 'Alignment-with-feature'}""") # TODO: add options for fat graphs (with parents and grandparents)
@@ -74,13 +81,13 @@ def main():
 
     # Loading Model definition
     
-    if embedding_name == 'bert' :
+    if embedding_name in model_name_dict:
 
-        tokenizer = BertTokenizer.from_pretrained(
-            "bert-base-uncased"
+        tokenizer = AutoTokenizer.from_pretrained(
+            model_name_dict[embedding_name]
         )  # Bert Tokenizer
     
-        emb_model = BertModel.from_pretrained("bert-base-uncased", output_hidden_states=True).to(
+        emb_model = AutoModel.from_pretrained(model_name_dict[embedding_name], output_hidden_states=True).to(
             device
         )  # Bert Model for Embeddings
         

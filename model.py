@@ -83,6 +83,8 @@ class Encoder(nn.Module):
 
         """
 
+        # print(len(embedding_vectors))
+
         if len(node):
 
             # token_list = torch.zeros(1, self.embedding_dim).to(self.device) # embedding vector for the node sequence
@@ -92,6 +94,11 @@ class Encoder(nn.Module):
             for token_id in node:
 
                 emb_id_list.extend(vector_lookup_list[token_id.item()])
+
+            # print(emb_id_list[0])
+            # print(type(emb_id_list[0]))
+
+            # print()
 
             input = [embedding_vectors[emb_id] for emb_id in emb_id_list]
 
